@@ -1,0 +1,18 @@
+GraphingApp {
+    PlotWidget {
+        width: 1fr;
+    }
+
+    Vertical {
+        width: 40;
+    }
+
+    #expression {
+        &.-valid {
+            border: tall $success 60%;
+        }
+        &.-valid:focus {
+            border: tall $success;
+        }
+    }
+}
