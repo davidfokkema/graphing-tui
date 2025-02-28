@@ -4,7 +4,13 @@ GraphingApp {
     }
 
     Vertical {
-        width: 40;
+        width: 30;
+        margin: 2 0 0 2;
+        border: round $primary;
+
+        Label {
+            margin-left: 1;
+        }
     }
 
     #expression {
