@@ -1,0 +1,17 @@
+[project]
+name = "graphing-tui"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "David Fokkema", email = "davidfokkema@icloud.com" }
+]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+graphing-tui = "graphing_tui:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
