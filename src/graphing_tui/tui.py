@@ -158,9 +158,10 @@ class GraphingApp(App[None]):
             plot = self.query_one(PlotWidget)
             plot.clear()
             x = np.linspace(plot._x_min, plot._x_max, 101)
-            symbols = {"x": x}
-            for parameter in self.query(Parameter):
-                symbols[parameter.name] = parameter.value
+            symbols = {
+                parameter.name: parameter.value for parameter in self.query(Parameter)
+            }
+            symbols["x"] = x
             aeval = asteval.Interpreter(usersyms=symbols)
             y = aeval(self._expression)
             if np.isscalar(y):
