@@ -13,6 +13,8 @@ class GraphingApp(App[None]):
     CSS_PATH = "tui.tcss"
     AUTO_FOCUS = "#expression"
 
+    _expression: str | None = None
+
     def compose(self) -> ComposeResult:
         with Horizontal():
             yield PlotWidget()
@@ -28,11 +30,19 @@ class GraphingApp(App[None]):
     @on(Input.Changed)
     def parse_expression(self, event: Input.Changed) -> None:
         if event.validation_result.is_valid:
+            self._expression = event.value
+        else:
+            self._expression = None
+        self.update_plot()
+
+    @on(PlotWidget.ScaleChanged)
+    def update_plot(self) -> None:
+        if self._expression is not None:
             plot = self.query_one(PlotWidget)
             plot.clear()
             x = np.linspace(plot._x_min, plot._x_max, 101)
             aeval = asteval.Interpreter(usersyms={"x": x})
-            y = aeval(event.value)
+            y = aeval(self._expression)
             if not isinstance(y, np.ndarray):
                 y = np.full_like(x, fill_value=y)
             plot.plot(x, y, hires_mode=HiResMode.BRAILLE)
