@@ -19,7 +19,7 @@ GraphingApp {
     }
 
     Vertical {
-        width: 30;
+        width: 35;
         margin: 2 0 0 2;
         border: round $primary;
 
