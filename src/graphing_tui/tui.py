@@ -5,7 +5,7 @@ from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.validation import ValidationResult, Validator
-from textual.widgets import Input, Label
+from textual.widgets import Footer, Header, Input, Label
 from textual_plot import HiResMode, PlotWidget
 
 
@@ -17,6 +17,8 @@ class GraphingApp(App[None]):
     _parameters: set = set()
 
     def compose(self) -> ComposeResult:
+        yield Header()
+        yield Footer()
         with Horizontal():
             yield PlotWidget()
             with Vertical():
