@@ -59,9 +59,11 @@ class GraphingApp(App[None]):
             x = np.linspace(plot._x_min, plot._x_max, 101)
             aeval = asteval.Interpreter(usersyms={"x": x})
             y = aeval(self._expression)
-            if not isinstance(y, np.ndarray):
+            if np.isscalar(y):
                 # if you don't include 'x', y will be a scalar
                 y = np.full_like(x, fill_value=y)
+            if not isinstance(y, np.ndarray):
+                return
             if np.isfinite(y).any():
                 # there are finite values to plot
                 plot.plot(x, y, hires_mode=HiResMode.BRAILLE)
