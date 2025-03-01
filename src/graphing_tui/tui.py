@@ -1,12 +1,38 @@
+from dataclasses import dataclass
+
 import asteval
 import libcst as cst
 import numpy as np
 from textual import on
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, Vertical
-from textual.validation import ValidationResult, Validator
+from textual.containers import Horizontal, Vertical, VerticalScroll
+from textual.message import Message
+from textual.reactive import reactive
+from textual.validation import Number, ValidationResult, Validator
 from textual.widgets import Footer, Header, Input, Label
 from textual_plot import HiResMode, PlotWidget
+
+
+class Parameter(Horizontal):
+    @dataclass
+    class Changed(Message):
+        parameter: str
+        value: float
+
+    value: reactive[float] = reactive(1.0, init=False)
+
+    def compose(self) -> ComposeResult:
+        yield Label(self.name)
+        yield Input(str(self.value), validate_on=["changed"], validators=[Number()])
+
+    @on(Input.Changed)
+    def update_value(self, event: Input.Changed) -> None:
+        event.stop()
+        if event.validation_result.is_valid:
+            self.value = float(event.value)
+
+    def watch_value(self, value: float) -> None:
+        self.post_message(self.Changed(parameter=self.name, value=value))
 
 
 class GraphingApp(App[None]):
@@ -29,6 +55,7 @@ class GraphingApp(App[None]):
                     validate_on=["changed"],
                     validators=ExpressionValidator(),
                 )
+                yield VerticalScroll(id="parameters")
 
     def on_mount(self) -> None:
         plot = self.query_one(PlotWidget)
@@ -44,20 +71,35 @@ class GraphingApp(App[None]):
             outdated = self._parameters - undefined
             self._parameters = undefined
             if new:
-                self.notify(f"New parameters found: {new}")
+                for parameter in new:
+                    self.add_parameter(parameter)
             if outdated:
-                self.notify(f"Outdated parameters removed: {outdated}")
+                for parameter in outdated:
+                    self.remove_parameter(parameter)
         else:
             self._expression = None
         self.update_plot()
 
+    def add_parameter(self, parameter: str) -> None:
+        parameters = self.query_one("#parameters", VerticalScroll)
+        parameters.mount(Parameter(name=parameter, id=parameter))
+
+    def remove_parameter(self, parameter: str) -> None:
+        parameters = self.query_one("#parameters", VerticalScroll)
+        widget = parameters.query_children("#" + parameter).first()
+        widget.remove()
+
     @on(PlotWidget.ScaleChanged)
+    @on(Parameter.Changed)
     def update_plot(self) -> None:
         if self._expression is not None:
             plot = self.query_one(PlotWidget)
             plot.clear()
             x = np.linspace(plot._x_min, plot._x_max, 101)
-            aeval = asteval.Interpreter(usersyms={"x": x})
+            symbols = {"x": x}
+            for parameter in self.query(Parameter):
+                symbols[parameter.name] = parameter.value
+            aeval = asteval.Interpreter(usersyms=symbols)
             y = aeval(self._expression)
             if np.isscalar(y):
                 # if you don't include 'x', y will be a scalar
