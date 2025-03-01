@@ -1,4 +1,19 @@
 GraphingApp {
+    Parameter {
+        height: auto;
+
+        Label {
+            width: 1fr;
+            height: 3;
+            text-style: bold;
+            content-align: left middle;
+        }
+
+        Input {
+            width: 15;
+        }
+    }
+
     PlotWidget {
         width: 1fr;
     }
