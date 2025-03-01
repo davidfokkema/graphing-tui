@@ -3,25 +3,21 @@ name = "graphing-tui"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "David Fokkema", email = "davidfokkema@icloud.com" }
-]
+authors = [{ name = "David Fokkema", email = "davidfokkema@icloud.com" }]
 requires-python = ">=3.11"
 dependencies = [
     "asteval>=1.0.6",
     "libcst>=1.6.0",
     "textual>=2.1.2",
-    "textual-plot>=0.1.1",
+    "textual-plot>=0.2.0",
 ]
 
 [project.scripts]
-graphing-tui = "graphing_tui:main"
+graphing-tui = "graphing_tui.tui:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = [
-    "textual-dev>=1.7.0",
-]
+dev = ["textual-dev>=1.7.0"]

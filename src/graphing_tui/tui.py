@@ -155,5 +155,13 @@ class ExpressionValidator(Validator):
             return self.success()
 
 
-if __name__ == "__main__":
+# for textual run
+app = GraphingApp
+
+
+def main():
     GraphingApp().run()
+
+
+if __name__ == "__main__":
+    main()

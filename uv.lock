@@ -215,7 +215,7 @@ requires-dist = [
     { name = "asteval", specifier = ">=1.0.6" },
     { name = "libcst", specifier = ">=1.6.0" },
     { name = "textual", specifier = ">=2.1.2" },
-    { name = "textual-plot", specifier = ">=0.1.1" },
+    { name = "textual-plot", specifier = ">=0.2.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -704,16 +704,16 @@ wheels = [
 
 [[package]]
 name = "textual-plot"
-version = "0.1.1"
+version = "0.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy" },
     { name = "textual" },
     { name = "textual-hires-canvas" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2a/b9/24ce073edeb769276a5bb94107f50b57c7a402e69e159e8c0968133dc5d7/textual_plot-0.1.1.tar.gz", hash = "sha256:4a6248bea948d3ce6d958e5cca2137c64dbe6531fd4b39d181b9603b51fcaa38", size = 1666330 }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/4b/d66597505cadaeb6fb6ed595784fd65bebb9321b8a8428a317c11d921968/textual_plot-0.2.0.tar.gz", hash = "sha256:967d4ee7e4de562a3675b7d3cf179d2f1f87d70fd712ac21d656a5fc53ba2b04", size = 1666910 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/38/2f93415771e37d59ae7b8af1e9d095f0c3e8f6e0ea14e558b7c0222f7802/textual_plot-0.1.1-py3-none-any.whl", hash = "sha256:adfa1fc1b43c73d7ddacecf037c488e90b103d8b4f6b4a0d6a8c5e7d09e79887", size = 39152 },
+    { url = "https://files.pythonhosted.org/packages/be/05/bae4d7a9950492fb42e87fe767b0540831d173d73a32a4db459758684810/textual_plot-0.2.0-py3-none-any.whl", hash = "sha256:5ab0988e0b29fa4b1505a69f4744008b7a1e354999396993a1b64c237442d42d", size = 39437 },
 ]
 
 [[package]]
