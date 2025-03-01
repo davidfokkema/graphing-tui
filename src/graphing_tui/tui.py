@@ -41,6 +41,7 @@ class Parameter(Horizontal):
         parameter: str
         value: float
 
+    name: str
     value: reactive[float] = reactive(1.0, init=False)
 
     def compose(self) -> ComposeResult:
