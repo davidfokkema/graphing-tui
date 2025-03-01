@@ -14,6 +14,8 @@ Graphing TUI is a terminal-based user interface application for graphing mathema
 
 ![screenshot of a periodic function](docs/images/screenshot-periodic-function.png)
 
+![video demo of graphing-tui](https://github.com/user-attachments/assets/1933bfcb-8647-489d-8b45-540ec3bb5f7d)
+
 ## Run without installation
 
 To run Graphing TUI without installing it first, use `uvx` or `pipx`:
