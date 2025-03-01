@@ -1,9 +1,11 @@
 [project]
 name = "graphing-tui"
 version = "0.1.0"
-description = "Add your description here"
+description = "A terminal-based user interface application for graphing mathematical functions."
 readme = "README.md"
 authors = [{ name = "David Fokkema", email = "davidfokkema@icloud.com" }]
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 dependencies = [
     "asteval>=1.0.6",
