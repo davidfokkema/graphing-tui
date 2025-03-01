@@ -28,6 +28,11 @@ class GraphingApp(App[None]):
                     validators=ExpressionValidator(),
                 )
 
+    def on_mount(self) -> None:
+        plot = self.query_one(PlotWidget)
+        plot.set_xlimits(-10, 10)
+        plot.set_ylimits(-10, 10)
+
     @on(Input.Changed)
     def parse_expression(self, event: Input.Changed) -> None:
         if event.validation_result.is_valid:
