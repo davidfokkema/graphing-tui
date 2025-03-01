@@ -119,16 +119,14 @@ class GraphingApp(App[None]):
         """
         if event.validation_result.is_valid:
             self._expression = event.value
-            undefined = self.get_undefined_variables(self._expression) - {"x"}
-            new = undefined - self._parameters
-            outdated = self._parameters - undefined
-            self._parameters = undefined
-            if new:
-                for parameter in new:
-                    self.add_parameter(parameter)
-            if outdated:
-                for parameter in outdated:
-                    self.remove_parameter(parameter)
+            all_parameters = self.get_undefined_variables(self._expression) - {"x"}
+            new = all_parameters - self._parameters
+            outdated = self._parameters - all_parameters
+            self._parameters = all_parameters
+            for parameter in new:
+                self.add_parameter(parameter)
+            for parameter in outdated:
+                self.remove_parameter(parameter)
         else:
             self._expression = None
         self.update_plot()
