@@ -14,6 +14,7 @@ class GraphingApp(App[None]):
     AUTO_FOCUS = "#expression"
 
     _expression: str | None = None
+    _parameters: set = set()
 
     def compose(self) -> ComposeResult:
         with Horizontal():
@@ -31,6 +32,14 @@ class GraphingApp(App[None]):
     def parse_expression(self, event: Input.Changed) -> None:
         if event.validation_result.is_valid:
             self._expression = event.value
+            undefined = self.get_undefined_variables(self._expression) - {"x"}
+            new = undefined - self._parameters
+            outdated = self._parameters - undefined
+            self._parameters = undefined
+            if new:
+                self.notify(f"New parameters found: {new}")
+            if outdated:
+                self.notify(f"Outdated parameters removed: {outdated}")
         else:
             self._expression = None
         self.update_plot()
@@ -43,9 +52,43 @@ class GraphingApp(App[None]):
             x = np.linspace(plot._x_min, plot._x_max, 101)
             aeval = asteval.Interpreter(usersyms={"x": x})
             y = aeval(self._expression)
-            if not isinstance(y, np.ndarray):
-                y = np.full_like(x, fill_value=y)
-            plot.plot(x, y, hires_mode=HiResMode.BRAILLE)
+            # if not isinstance(y, np.ndarray):
+            #     y = np.full_like(x, fill_value=y)
+            # plot.plot(x, y, hires_mode=HiResMode.BRAILLE)
+
+    def get_undefined_variables(self, expression: str) -> set:
+        """
+        Get a set of undefined variables in the given expression.
+
+        This method uses libcst to parse the expression and collect all symbols.
+        It then filters out any symbols that are predefined in the asteval symbol table.
+
+        Args:
+            expression (str): The mathematical expression to evaluate.
+
+        Returns:
+            set: A set of undefined variable names found in the expression.
+        """
+
+        class SymbolCollector(cst.CSTVisitor):
+            def __init__(self):
+                self.symbols = set()
+
+            def visit_Name(self, node: cst.Name) -> None:
+                self.symbols.add(node.value)
+
+        # Parse the expression and collect all symbols
+        tree = cst.parse_expression(expression)
+        collector = SymbolCollector()
+        tree.visit(collector)
+
+        # Predefined symbols in asteval
+        predefined_symbols = set(asteval.Interpreter().symtable.keys())
+
+        # Filter out predefined symbols
+        undefined_symbols = collector.symbols - predefined_symbols
+
+        return undefined_symbols
 
 
 class ExpressionValidator(Validator):
